@@ -4,14 +4,12 @@ on:
   push:
     branches:
       - main
-    paths:
-          ['**.js', '.github/workflows/build.yml','package.json' ]
   pull_request:
     branches:
       - master
 
 jobs:
-  build-and-deploy:
+  sonarcloud:
     runs-on: ubuntu-latest
     steps:
       - name: Step 1 - Checkout main branch from GitHub
@@ -20,21 +18,16 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20.11.1' # Adjust the Node.js version as per your requirements
+          node-version: '14'
 
       - name: Install dependencies
-        run: npm install # or yarn install if you use Yarn
+        run: npm install
 
-      - name: Build static site
-        run: npm run build # Adjust the build script as per your project setup
+      - name: Run tests with coverage
+        run: npm run test:coverage
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build # Adjust the directory where your static site is generated
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: Analyze code with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
