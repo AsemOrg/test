@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-          ['**.js', '.github/workflows/build.yml' ]
+          ['**.js', '.github/workflows/build.yml','package.json' ]
   pull_request:
     branches:
       - master
