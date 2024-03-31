@@ -3,7 +3,9 @@ name: Build and Deploy Static Site
 on:
   push:
     branches:
-      - master
+      - main
+    paths:
+          ['**.js', '.github/workflows/build.yml' ]
   pull_request:
     branches:
       - master
